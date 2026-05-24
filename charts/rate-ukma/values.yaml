@@ -1,6 +1,9 @@
 nameOverride: ""
 fullnameOverride: ""
 
+# imagePullSecrets:
+#   - name: ghcr-auth
+
 environment: staging
 
 backend:

@@ -1,4 +1,5 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-# SealedSecret resources are added here after running kubeseal
-resources: []
+resources:
+  - django-sealed.yaml
+  - postgres-sealed.yaml

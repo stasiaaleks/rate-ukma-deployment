@@ -46,7 +46,7 @@ spec:
               memory: 128Mi
             limits:
               cpu: 200m
-              memory: {{ .Values.redis.maxMemory }}
+              memory: 512Mi
 ---
 apiVersion: v1
 kind: Service
