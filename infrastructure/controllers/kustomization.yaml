@@ -4,4 +4,3 @@ resources:
   - sealed-secrets
   - ingress-nginx
   - cloudnative-pg
-  - dragonfly

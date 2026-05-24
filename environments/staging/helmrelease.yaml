@@ -55,8 +55,6 @@ spec:
       storage:
         size: 5Gi
 
-    dragonfly:
-      replicas: 1
-      image: ghcr.io/dragonflydb/dragonfly:v1.38.1
+    redis:
       maxMemory: 256mb
       maxMemoryPolicy: allkeys-lfu
