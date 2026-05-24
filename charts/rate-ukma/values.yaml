@@ -45,5 +45,6 @@ postgres:
 
 dragonfly:
   replicas: 1
+  image: ghcr.io/dragonflydb/dragonfly:v1.38.1
   maxMemory: 256mb
   maxMemoryPolicy: allkeys-lfu

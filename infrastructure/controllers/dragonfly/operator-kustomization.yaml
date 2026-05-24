@@ -1,0 +1,15 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: dragonfly-operator
+  namespace: flux-system
+spec:
+  interval: 1h
+  # Install the operator from the official manifests/ dir in the GitHub repo
+  path: ./manifests
+  sourceRef:
+    kind: GitRepository
+    name: dragonfly-operator
+  prune: true
+  wait: true
+  timeout: 3m

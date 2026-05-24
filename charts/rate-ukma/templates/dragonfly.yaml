@@ -7,7 +7,15 @@ metadata:
     {{- include "rate-ukma.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.dragonfly.replicas }}
+  image: {{ .Values.dragonfly.image }}
   args:
     - --maxmemory={{ .Values.dragonfly.maxMemory }}
     - --maxmemory-policy={{ .Values.dragonfly.maxMemoryPolicy }}
     - --appendonly=yes
+  resources:
+    requests:
+      memory: "128Mi"
+      cpu: "100m"
+    limits:
+      memory: {{ .Values.dragonfly.maxMemory }}
+      cpu: "500m"

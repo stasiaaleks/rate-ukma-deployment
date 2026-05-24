@@ -67,3 +67,6 @@ spec:
 
     dragonfly:
       replicas: 2
+      image: ghcr.io/dragonflydb/dragonfly:v1.38.1
+      maxMemory: 512mb
+      maxMemoryPolicy: allkeys-lfu

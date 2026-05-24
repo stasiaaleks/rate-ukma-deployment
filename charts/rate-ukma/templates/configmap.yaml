@@ -17,7 +17,6 @@ data:
   POSTGRES_HOST: "{{ include "rate-ukma.fullname" . }}-postgres-rw"
   POSTGRES_PORT: "5432"
   POSTGRES_DB: "rateukma"
-  # Redis — Dragonfly service
   REDIS_HOST: "{{ include "rate-ukma.fullname" . }}-dragonfly"
   REDIS_PORT: "6379"
   REDIS_DB: "0"
