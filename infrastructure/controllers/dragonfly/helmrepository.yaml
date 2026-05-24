@@ -7,3 +7,5 @@ spec:
   type: oci
   interval: 1h
   url: oci://ghcr.io/dragonflydb/dragonfly-operator/helm
+  secretRef:
+    name: ghcr-auth
