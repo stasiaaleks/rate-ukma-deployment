@@ -47,5 +47,5 @@ postgres:
     size: 5Gi
 
 redis:
-  maxMemory: 256mb
+  maxMemory: 256M
   maxMemoryPolicy: allkeys-lfu

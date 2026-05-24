@@ -69,5 +69,5 @@ spec:
         size: 10Gi
 
     redis:
-      maxMemory: 512mb
+      maxMemory: 512M
       maxMemoryPolicy: allkeys-lfu
