@@ -1,0 +1,13 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: image-automation
+  namespace: flux-system
+spec:
+  interval: 10m
+  # No wait:true — auth issues should not block app deployment
+  path: ./infrastructure/image-automation
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system

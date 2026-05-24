@@ -6,3 +6,5 @@ metadata:
 spec:
   image: ghcr.io/ukma-cs-ssdm-2025/rate-ukma/webapp
   interval: 1m0s
+  secretRef:
+    name: ghcr-auth
