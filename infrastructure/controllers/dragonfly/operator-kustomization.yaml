@@ -5,11 +5,11 @@ metadata:
   namespace: flux-system
 spec:
   interval: 1h
-  # Install the operator from the official manifests/ dir in the GitHub repo
-  path: ./manifests
+  # Use our local copy of the manifest to avoid issues with upstream kustomization.yaml
+  path: ./infrastructure/controllers/dragonfly/manifests
   sourceRef:
     kind: GitRepository
-    name: dragonfly-operator
+    name: flux-system
   prune: true
   wait: true
   timeout: 3m
