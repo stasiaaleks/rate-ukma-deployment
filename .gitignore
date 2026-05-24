@@ -1,0 +1,4 @@
+# Plaintext secret files — never commit these
+secret-*.yaml
+*-cert.pem
+*.pem

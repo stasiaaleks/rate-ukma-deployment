@@ -1,0 +1,13 @@
+apiVersion: dragonflydb.io/v1alpha1
+kind: Dragonfly
+metadata:
+  name: {{ include "rate-ukma.fullname" . }}-dragonfly
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "rate-ukma.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.dragonfly.replicas }}
+  args:
+    - --maxmemory={{ .Values.dragonfly.maxMemory }}
+    - --maxmemory-policy={{ .Values.dragonfly.maxMemoryPolicy }}
+    - --appendonly=yes

@@ -1,0 +1,28 @@
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageUpdateAutomation
+metadata:
+  name: rate-ukma
+  namespace: flux-system
+spec:
+  interval: 5m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  git:
+    checkout:
+      ref:
+        branch: main
+    commit:
+      author:
+        email: fluxcdbot@users.noreply.github.com
+        name: fluxcdbot
+      messageTemplate: |
+        chore(auto): update images
+        {{range .Updated.Images -}}
+        - {{.}}
+        {{end -}}
+    push:
+      branch: main
+  update:
+    path: ./environments
+    strategy: Setters

@@ -1,0 +1,106 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "rate-ukma.fullname" . }}-backend
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "rate-ukma.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.backend.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: backend
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: backend
+        app.kubernetes.io/instance: {{ .Release.Name }}
+        app.kubernetes.io/name: {{ include "rate-ukma.name" . }}
+    spec:
+      initContainers:
+        # Run Django migrations before starting Gunicorn
+        # Django's migration framework uses database-level locking so concurrent pods are safe
+        - name: migrate
+          image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
+          imagePullPolicy: {{ .Values.backend.image.pullPolicy }}
+          command:
+            - /opt/venv/bin/python
+            - manage.py
+            - migrate
+            - --noinput
+          envFrom:
+            - configMapRef:
+                name: {{ include "rate-ukma.fullname" . }}-config
+            - secretRef:
+                name: rate-ukma-django
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: rate-ukma-postgres
+                  key: username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rate-ukma-postgres
+                  key: password
+      containers:
+        - name: backend
+          image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
+          imagePullPolicy: {{ .Values.backend.image.pullPolicy }}
+          # Override entrypoint to run Gunicorn directly (no migrate/collectstatic)
+          command:
+            - /opt/venv/bin/gunicorn
+            - rateukma.wsgi:application
+            - --bind=0.0.0.0:8000
+            - --workers={{ .Values.backend.gunicorn.workers }}
+            - --worker-class=gthread
+            - --threads={{ .Values.backend.gunicorn.threads }}
+            - --timeout=300
+            - --preload
+            - --access-logfile=-
+            - --max-requests=1000
+            - --max-requests-jitter=100
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: {{ include "rate-ukma.fullname" . }}-config
+            - secretRef:
+                name: rate-ukma-django
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: rate-ukma-postgres
+                  key: username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rate-ukma-postgres
+                  key: password
+          readinessProbe:
+            httpGet:
+              path: /admin/login/
+              port: 8000
+              httpHeaders:
+                - name: Host
+                  value: {{ .Values.ingress.host }}
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /admin/login/
+              port: 8000
+              httpHeaders:
+                - name: Host
+                  value: {{ .Values.ingress.host }}
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            failureThreshold: 3
+          resources:
+            {{- toYaml .Values.backend.resources | nindent 12 }}

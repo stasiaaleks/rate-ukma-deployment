@@ -1,0 +1,59 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: rate-ukma
+  namespace: staging
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: ./charts/rate-ukma
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+      interval: 1m
+  targetNamespace: staging
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  values:
+    environment: staging
+
+    backend:
+      image:
+        tag: "0.0.0" # {"$imagepolicy": "flux-system:rate-ukma-backend:tag"}
+      replicaCount: 1
+      gunicorn:
+        workers: 2
+        threads: 2
+      env:
+        LOGIN_REDIRECT_URL: "http://app.staging.local/"
+        LOGOUT_REDIRECT_URL: "http://app.staging.local/"
+        LOGIN_ERROR_URL: "http://app.staging.local/auth/failed"
+
+    frontend:
+      image:
+        tag: "staging-0.0.0" # {"$imagepolicy": "flux-system:rate-ukma-webapp-staging:tag"}
+      replicaCount: 1
+
+    ingress:
+      enabled: true
+      className: nginx
+      host: app.staging.local
+      tls: false
+
+    autoscaling:
+      enabled: false
+
+    postgres:
+      instances: 1
+      storage:
+        size: 5Gi
+
+    dragonfly:
+      replicas: 1

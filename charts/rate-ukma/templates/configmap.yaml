@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "rate-ukma.fullname" . }}-config
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "rate-ukma.labels" . | nindent 4 }}
+data:
+  DJANGO_SETTINGS_MODULE: "rateukma.settings.prod"
+  DJANGO_DEBUG: "False"
+  CONSOLE_LOG_LEVEL: "INFO"
+  # Hostnames: Ingress host + loopback for internal health checks
+  ALLOWED_HOSTS: "{{ .Values.ingress.host }},127.0.0.1,localhost"
+  CSRF_TRUSTED_ORIGINS: "http://{{ .Values.ingress.host }},https://{{ .Values.ingress.host }}"
+  CORS_ALLOWED_ORIGINS: "http://{{ .Values.ingress.host }},https://{{ .Values.ingress.host }}"
+  # Database — CloudNativePG primary read-write service
+  POSTGRES_HOST: "{{ include "rate-ukma.fullname" . }}-postgres-rw"
+  POSTGRES_PORT: "5432"
+  POSTGRES_DB: "rateukma"
+  # Redis — Dragonfly service
+  REDIS_HOST: "{{ include "rate-ukma.fullname" . }}-dragonfly"
+  REDIS_PORT: "6379"
+  REDIS_DB: "0"
+  # Auth redirects
+  LOGIN_REDIRECT_URL: {{ .Values.backend.env.LOGIN_REDIRECT_URL | quote }}
+  LOGOUT_REDIRECT_URL: {{ .Values.backend.env.LOGOUT_REDIRECT_URL | quote }}
+  LOGIN_ERROR_URL: {{ .Values.backend.env.LOGIN_ERROR_URL | quote }}
+  # Static files dir for collectstatic in the frontend init container
+  STATIC_ROOT: "/static"
+  GUNICORN_WORKERS: {{ .Values.backend.gunicorn.workers | quote }}
+  ENVIRONMENT: {{ .Values.environment | quote }}

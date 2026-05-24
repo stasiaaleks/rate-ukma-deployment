@@ -1,0 +1,69 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: rate-ukma
+  namespace: production
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: ./charts/rate-ukma
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+      interval: 1m
+  targetNamespace: production
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  values:
+    environment: production
+
+    backend:
+      image:
+        tag: "0.0.0" # {"$imagepolicy": "flux-system:rate-ukma-backend:tag"}
+      replicaCount: 2
+      gunicorn:
+        workers: 4
+        threads: 2
+      resources:
+        requests:
+          cpu: 200m
+          memory: 512Mi
+        limits:
+          cpu: 1000m
+          memory: 1Gi
+      env:
+        LOGIN_REDIRECT_URL: "http://app.local/"
+        LOGOUT_REDIRECT_URL: "http://app.local/"
+        LOGIN_ERROR_URL: "http://app.local/auth/failed"
+
+    frontend:
+      image:
+        tag: "live-0.0.0" # {"$imagepolicy": "flux-system:rate-ukma-webapp-live:tag"}
+      replicaCount: 1
+
+    ingress:
+      enabled: true
+      className: nginx
+      host: app.local
+      tls: false
+
+    autoscaling:
+      enabled: true
+      minReplicas: 2
+      maxReplicas: 5
+      targetCPUUtilizationPercentage: 70
+
+    postgres:
+      instances: 2
+      storage:
+        size: 10Gi
+
+    dragonfly:
+      replicas: 2

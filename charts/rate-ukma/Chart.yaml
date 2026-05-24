@@ -1,0 +1,14 @@
+apiVersion: v2
+name: rate-ukma
+description: RateUKMA — course and professor rating application for NaUKMA students
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+keywords:
+  - ukma
+  - course-rating
+  - django
+  - react
+maintainers:
+  - name: ukma-cs-ssdm-2025
+    url: https://github.com/ukma-cs-ssdm-2025

@@ -1,0 +1,25 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: {{ include "rate-ukma.fullname" . }}-postgres
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "rate-ukma.labels" . | nindent 4 }}
+spec:
+  instances: {{ .Values.postgres.instances }}
+  storage:
+    size: {{ .Values.postgres.storage.size }}
+  bootstrap:
+    initdb:
+      database: rateukma
+      owner: rateukma
+      # CNPG reads username+password from this secret to create the DB owner
+      # The same secret is used by the backend to authenticate
+      # This avoids relying on CNPG's auto-generated app secret for bootstrapping
+      secret:
+        name: rate-ukma-postgres
+  postgresql:
+    pg_hba:
+      - host all all 0.0.0.0/0 scram-sha-256
+  monitoring:
+    enablePodMonitor: false
