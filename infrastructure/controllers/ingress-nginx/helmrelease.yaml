@@ -23,5 +23,4 @@ spec:
         # k3s ServiceLB assigns the node external IP to LoadBalancer services
         type: LoadBalancer
       config:
-        use-forwarded-headers: "true"
         proxy-body-size: "10m"
