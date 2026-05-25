@@ -18,8 +18,8 @@ spec:
         name: fluxcdbot
       messageTemplate: |
         chore(auto): update images
-        {{range .Updated.Images -}}
-        - {{.}}
+        {{range .Changed.Changes -}}
+        - {{.OldValue}} -> {{.NewValue}}
         {{end -}}
     push:
       branch: main
