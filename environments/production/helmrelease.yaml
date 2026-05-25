@@ -26,13 +26,11 @@ spec:
       retries: 3
   values:
     environment: production
-
     imagePullSecrets:
       - name: ghcr-auth
-
     backend:
       image:
-        tag: "v1.7.5" # {"$imagepolicy": "flux-system:rate-ukma-backend:tag"}
+        tag: "v1.7.6" # {"$imagepolicy": "flux-system:rate-ukma-backend:tag"}
       replicaCount: 2
       gunicorn:
         workers: 4
@@ -48,29 +46,24 @@ spec:
         LOGIN_REDIRECT_URL: "https://k8s-beta.rateukma.com/"
         LOGOUT_REDIRECT_URL: "https://k8s-beta.rateukma.com/"
         LOGIN_ERROR_URL: "https://k8s-beta.rateukma.com/auth/failed"
-
     frontend:
       image:
         tag: "k8s-beta-v1.7.5" # {"$imagepolicy": "flux-system:rate-ukma-webapp-k8s-beta:tag"}
       replicaCount: 1
-
     ingress:
       enabled: true
       className: nginx
       host: k8s-beta.rateukma.com
       tls: true
-
     autoscaling:
       enabled: true
       minReplicas: 2
       maxReplicas: 5
       targetCPUUtilizationPercentage: 70
-
     postgres:
       instances: 2
       storage:
         size: 10Gi
-
     redis:
       maxMemory: 512M
       maxMemoryPolicy: allkeys-lfu
