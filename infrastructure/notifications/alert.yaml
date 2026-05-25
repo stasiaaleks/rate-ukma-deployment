@@ -17,3 +17,12 @@ spec:
     - kind: HelmRelease
       name: rate-ukma
       namespace: production
+    - kind: ImageUpdateAutomation
+      name: rate-ukma
+      namespace: flux-system
+    - kind: ImagePolicy
+      name: rate-ukma-backend
+      namespace: flux-system
+    - kind: ImagePolicy
+      name: rate-ukma-webapp-k8s-beta
+      namespace: flux-system
