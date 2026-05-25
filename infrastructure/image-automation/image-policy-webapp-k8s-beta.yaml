@@ -1,0 +1,15 @@
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImagePolicy
+metadata:
+  name: rate-ukma-webapp-k8s-beta
+  namespace: flux-system
+spec:
+  # Reuse the existing webapp ImageRepository (watches all webapp tags)
+  imageRepositoryRef:
+    name: rate-ukma-webapp-live
+  filterTags:
+    pattern: '^k8s-beta-v(?P<ver>[0-9]+\.[0-9]+\.[0-9]+)$'
+    extract: '$ver'
+  policy:
+    semver:
+      range: ">=0.0.0"

@@ -7,4 +7,5 @@ resources:
   - image-policy-backend.yaml
   - image-policy-webapp-staging.yaml
   - image-policy-webapp-live.yaml
+  - image-policy-webapp-k8s-beta.yaml
   - image-update-automation.yaml

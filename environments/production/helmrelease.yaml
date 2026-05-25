@@ -51,7 +51,7 @@ spec:
 
     frontend:
       image:
-        tag: "live-v1.7.5" # {"$imagepolicy": "flux-system:rate-ukma-webapp-live:tag"}
+        tag: "k8s-beta-v1.7.5" # {"$imagepolicy": "flux-system:rate-ukma-webapp-k8s-beta:tag"}
       replicaCount: 1
 
     ingress:
