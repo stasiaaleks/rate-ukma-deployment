@@ -23,9 +23,12 @@ spec:
           image: redis:7-alpine
           command:
             - redis-server
-            - --maxmemory={{ .Values.redis.maxMemory }}
-            - --maxmemory-policy={{ .Values.redis.maxMemoryPolicy }}
-            - --appendonly=yes
+            - --maxmemory
+            - {{ .Values.redis.maxMemory | quote }}
+            - --maxmemory-policy
+            - {{ .Values.redis.maxMemoryPolicy | quote }}
+            - --appendonly
+            - "yes"
           ports:
             - name: redis
               containerPort: 6379
