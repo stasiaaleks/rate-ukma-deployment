@@ -32,7 +32,7 @@ spec:
 
     backend:
       image:
-        tag: "0.0.0" # {"$imagepolicy": "flux-system:rate-ukma-backend:tag"}
+        tag: "v1.7.5" # {"$imagepolicy": "flux-system:rate-ukma-backend:tag"}
       replicaCount: 2
       gunicorn:
         workers: 4
@@ -51,7 +51,7 @@ spec:
 
     frontend:
       image:
-        tag: "live-0.0.0" # {"$imagepolicy": "flux-system:rate-ukma-webapp-live:tag"}
+        tag: "live-v1.7.5" # {"$imagepolicy": "flux-system:rate-ukma-webapp-live:tag"}
       replicaCount: 1
 
     ingress:

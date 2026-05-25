@@ -8,7 +8,7 @@ spec:
     name: rate-ukma-webapp-staging
   filterTags:
     # Match tags like staging-1.2.3, extract the semver part for comparison
-    pattern: '^staging-(?P<ver>[0-9]+\.[0-9]+\.[0-9]+)$'
+    pattern: '^staging-v(?P<ver>[0-9]+\.[0-9]+\.[0-9]+)$'
     extract: '$ver'
   policy:
     semver:
