@@ -36,7 +36,7 @@ GitOps infrastructure for [RateUKMA](https://github.com/ukma-cs-ssdm-2025/rate-u
 | Environment | Namespace | Domain | Replicas | DB |
 |---|---|---|---|---|
 | Staging | `staging` | `app.staging.local` | 1 backend | CNPG single instance |
-| Production | `production` | `app.local` | 2–5 (HPA) | CNPG primary + 1 replica |
+| Production | `production` | `k8s-beta.rateukma.com` | 2–5 (HPA) | CNPG primary + 1 replica |
 
 ## VM Requirements
 
@@ -192,14 +192,14 @@ Commit and push. Flux will pick up the sealed secrets and the Sealed Secrets con
 
 ```
 <staging-vm-ip>  app.staging.local
-<prod-vm-ip>     app.local
+<prod-vm-ip>     k8s-beta.rateukma.com
 ```
 
 ### 6. Update Azure App Registration
 
 Add redirect URIs in the Azure portal for your Microsoft OAuth app:
 - `http://app.staging.local/accounts/microsoft/login/callback/`
-- `http://app.local/accounts/microsoft/login/callback/`
+- `http://k8s-beta.rateukma.com/accounts/microsoft/login/callback/`
 
 ---
 

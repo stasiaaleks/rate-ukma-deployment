@@ -45,9 +45,9 @@ spec:
           cpu: 1000m
           memory: 1Gi
       env:
-        LOGIN_REDIRECT_URL: "http://app.local/"
-        LOGOUT_REDIRECT_URL: "http://app.local/"
-        LOGIN_ERROR_URL: "http://app.local/auth/failed"
+        LOGIN_REDIRECT_URL: "https://k8s-beta.rateukma.com/"
+        LOGOUT_REDIRECT_URL: "https://k8s-beta.rateukma.com/"
+        LOGIN_ERROR_URL: "https://k8s-beta.rateukma.com/auth/failed"
 
     frontend:
       image:
@@ -57,7 +57,7 @@ spec:
     ingress:
       enabled: true
       className: nginx
-      host: app.local
+      host: k8s-beta.rateukma.com
       tls: false
 
     autoscaling:
