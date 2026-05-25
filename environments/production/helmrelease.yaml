@@ -58,7 +58,7 @@ spec:
       enabled: true
       className: nginx
       host: k8s-beta.rateukma.com
-      tls: false
+      tls: true
 
     autoscaling:
       enabled: true
